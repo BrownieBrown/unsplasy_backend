@@ -1,4 +1,3 @@
 package mbraun.unsplasy.message
 
-class ResponseMessage {
-}
+class ResponseMessage(val message: String)

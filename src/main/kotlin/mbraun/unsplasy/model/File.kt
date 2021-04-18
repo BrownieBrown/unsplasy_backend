@@ -12,15 +12,21 @@ import javax.validation.constraints.NotNull
 @Table
 data class File(
     @Id
-    private val id: UUID = UUID.randomUUID(),
+    val id: UUID = UUID.randomUUID(),
     @NotBlank(message = "Name is mandatory")
-    private var name: String = "",
+    var name: String = "",
     @NotBlank(message = "Type is mandatory")
-    private var type: String = "",
+    var type: String = "",
     @NotNull
     @Lob
-    private var data: ByteArray = byteArrayOf()
+    var data: ByteArray = byteArrayOf()
 ) {
+    constructor(name: String, type: String, data: ByteArray) : this() {
+        this.name = name
+        this.type = type
+        this.data = data
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
