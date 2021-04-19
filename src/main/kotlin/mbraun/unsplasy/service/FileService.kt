@@ -26,9 +26,6 @@ class FileService(@Autowired val fileRepository: FileRepository) {
     }
 
     fun deleteById(id: UUID) {
-        if(!fileRepository.existsById(id)) {
-            throw FileNotFoundException("The File with id $id does not exist")
-        }
         fileRepository.deleteById(id)
     }
 }

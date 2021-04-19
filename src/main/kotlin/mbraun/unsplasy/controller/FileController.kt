@@ -4,6 +4,7 @@ import mbraun.unsplasy.message.ResponseFile
 import mbraun.unsplasy.message.ResponseMessage
 import mbraun.unsplasy.service.FileService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -64,7 +65,18 @@ class FileController(@Autowired val fileService: FileService) {
     }
 
     @DeleteMapping("/files/delete/{id}")
-    fun deleteFile(@PathVariable id: UUID) {
+    fun deleteFile(@PathVariable id: UUID): ResponseEntity<ResponseMessage> {
         fileService.deleteById(id)
+        return try {
+             ResponseEntity.status(HttpStatus.OK).body(
+                ResponseMessage(
+                    "Deleted the file with id: $id successfully"
+                ))
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                ResponseMessage(
+                    "Could not delete the file with id: $id!"
+                ))
+        }
     }
 }

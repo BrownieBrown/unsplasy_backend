@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
-class FileNotFoundException : ResponseEntityExceptionHandler() {
+class FileExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(EmptyResultDataAccessException::class)
     fun handleEmptyResultException(exc: EmptyResultDataAccessException): ResponseEntity<ResponseMessage> {
