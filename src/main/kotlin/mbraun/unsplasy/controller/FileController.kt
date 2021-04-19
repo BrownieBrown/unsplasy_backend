@@ -4,7 +4,6 @@ import mbraun.unsplasy.message.ResponseFile
 import mbraun.unsplasy.message.ResponseMessage
 import mbraun.unsplasy.service.FileService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
