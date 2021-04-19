@@ -17,7 +17,7 @@ import java.util.*
 @Controller
 class FileController(@Autowired val fileService: FileService) {
 
-    @PostMapping("/upload")
+    @PostMapping("upload")
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<ResponseMessage> {
         return try {
             fileService.store(file)
@@ -34,12 +34,12 @@ class FileController(@Autowired val fileService: FileService) {
         }
     }
 
-    @GetMapping("/files")
+    @GetMapping("files")
     fun getListFiles(): ResponseEntity<List<ResponseFile>> {
         val files: List<ResponseFile> = fileService.getAllFiles().map { dbFile ->
             val fileDownloadUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/files/")
+                .path("files/")
                 .path(dbFile.id.toString())
                 .toUriString()
 
@@ -54,7 +54,7 @@ class FileController(@Autowired val fileService: FileService) {
         return ResponseEntity.status(HttpStatus.OK).body(files)
     }
 
-    @GetMapping("/files/{id}")
+    @GetMapping("files/{id}")
     fun getFile(@PathVariable id: UUID): ResponseEntity<ByteArray> {
         val file = fileService.getFile(id)
 
@@ -64,7 +64,7 @@ class FileController(@Autowired val fileService: FileService) {
             .body(file.data)
     }
 
-    @DeleteMapping("/files/delete/{id}")
+    @DeleteMapping("files/delete/{id}")
     fun deleteFile(@PathVariable id: UUID): ResponseEntity<ResponseMessage> {
         fileService.deleteById(id)
         return try {
