@@ -19,7 +19,7 @@ data class File(
     var likes: Int = 0,
     var likedByUser: Boolean = false,
     var description: String = "",
-    val selfUrl: String = "http://localhost:8080/files/$id",
+    val selfUrl: String = "https://unsplasy-backend.herokuapp.com/files/$id",
     var name: String = "",
     var type: String = "",
     var data: ByteArray = byteArrayOf()
