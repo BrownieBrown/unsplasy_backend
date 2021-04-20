@@ -34,9 +34,29 @@ class FileController(@Autowired val fileService: FileService) {
         }
     }
 
+//    @GetMapping("/files")
+//    fun getListFiles(): ResponseEntity<List<ResponseFile>> {
+//        val files: List<ResponseFile> = fileService.getAllFiles().map { dbFile ->
+//            val fileDownloadUri = ServletUriComponentsBuilder
+//                .fromCurrentContextPath()
+//                .path("/files/")
+//                .path(dbFile.id.toString())
+//                .toUriString()
+//
+//            ResponseFile(
+//                dbFile.name,
+//                fileDownloadUri,
+//                dbFile.type,
+//                dbFile.data.size.toLong()
+//            )
+//        }.toList()
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(files)
+//    }
+
     @GetMapping("/files")
     fun getListFiles(): ResponseEntity<List<ResponseFile>> {
-        val files: List<ResponseFile> = fileService.getAllFiles().map { dbFile ->
+        val files: List<ResponseFile> = fileService.findFiles().map { dbFile ->
             val fileDownloadUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/files/")

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 @Entity
-@Table
+@Table(name = "file")
 data class File(
     @Id
     val id: UUID = UUID.randomUUID(),
@@ -20,11 +20,8 @@ data class File(
     var likedByUser: Boolean = false,
     var description: String = "",
     val selfUrl: String = "http://localhost:8080/files/$id",
-    @NotBlank(message = "Name is mandatory")
     var name: String = "",
     var type: String = "",
-    @NotNull
-    @Lob
     var data: ByteArray = byteArrayOf()
 ) {
     override fun equals(other: Any?): Boolean {

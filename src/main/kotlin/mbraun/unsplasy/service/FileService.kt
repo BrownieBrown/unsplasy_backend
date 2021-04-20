@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.FileNotFoundException
+import java.nio.file.Files
 import java.time.LocalDateTime
 import java.util.*
 
@@ -27,8 +28,12 @@ class FileService(@Autowired val fileRepository: FileRepository) {
         return fileRepository.findById(id).get()
     }
 
-    fun getAllFiles(): Sequence<File> {
-        return fileRepository.findAll().asSequence()
+//    fun getAllFiles(): Sequence<File> {
+//        return fileRepository.findAll().asSequence()
+//    }
+
+    fun findFiles(): List<File> {
+        return fileRepository.findFiles()
     }
 
     fun deleteById(id: UUID) {
