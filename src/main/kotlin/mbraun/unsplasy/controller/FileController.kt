@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.*
 
 @Controller
+@CrossOrigin("http://localhost:3000")
 class FileController(@Autowired val fileService: FileService) {
 
     @PostMapping("/upload")
