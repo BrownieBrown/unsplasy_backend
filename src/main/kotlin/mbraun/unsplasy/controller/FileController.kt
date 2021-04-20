@@ -2,6 +2,7 @@ package mbraun.unsplasy.controller
 
 import mbraun.unsplasy.message.ResponseFile
 import mbraun.unsplasy.message.ResponseMessage
+import mbraun.unsplasy.model.File
 import mbraun.unsplasy.service.FileService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -55,21 +56,8 @@ class FileController(@Autowired val fileService: FileService) {
 //    }
 
     @GetMapping("/files")
-    fun getListFiles(): ResponseEntity<List<ResponseFile>> {
-        val files: List<ResponseFile> = fileService.findFiles().map { dbFile ->
-            val fileDownloadUri = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/files/")
-                .path(dbFile.id.toString())
-                .toUriString()
-
-            ResponseFile(
-                dbFile.name,
-                fileDownloadUri,
-                dbFile.type,
-                dbFile.data.size.toLong()
-            )
-        }.toList()
+    fun getListFiles(): ResponseEntity<List<File>> {
+        val files: List<File> = fileService.findFiles()
 
         return ResponseEntity.status(HttpStatus.OK).body(files)
     }
