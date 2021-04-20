@@ -1,5 +1,6 @@
 package mbraun.unsplasy.model
 
+import org.hibernate.annotations.Type
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.Entity
@@ -22,7 +23,8 @@ data class File(
     val selfUrl: String = "https://unsplasy-backend.herokuapp.com/files/$id",
     var name: String = "",
     var type: String = "",
-    var data: ByteArray = byteArrayOf()
+    @Lob
+    val data: ByteArray = byteArrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
