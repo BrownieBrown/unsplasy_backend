@@ -21,4 +21,9 @@ class FileExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleMaxSizeException(exc: MaxUploadSizeExceededException): ResponseEntity<ResponseMessage> {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(ResponseMessage("File too large!"))
     }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleMaxSizeException(exc: NoSuchElementException): ResponseEntity<ResponseMessage> {
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(ResponseMessage("File does not exist!"))
+    }
 }

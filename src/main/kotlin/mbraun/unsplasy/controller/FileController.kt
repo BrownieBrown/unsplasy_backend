@@ -63,13 +63,13 @@ class FileController(@Autowired val fileService: FileService) {
     }
 
     @GetMapping("/files/{id}")
-    fun getFile(@PathVariable id: UUID): ResponseEntity<ByteArray> {
+    fun getFile(@PathVariable id: UUID): ResponseEntity<File> {
         val file = fileService.getFile(id)
 
         return ResponseEntity
             .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name} ")
-            .body(file.data)
+            .body(file)
     }
 
     @DeleteMapping("/files/delete/{id}")
