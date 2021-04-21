@@ -1,12 +1,9 @@
 package mbraun.unsplasy.model
 
-import org.hibernate.annotations.Type
-import org.hibernate.type.BinaryType
+import java.net.URI
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "file")
@@ -18,13 +15,15 @@ data class File(
     var likes: Int = 0,
     var likedByUser: Boolean = false,
     var description: String = "",
-    val selfUrl: String = "https://unsplasy-backend.herokuapp.com/files/$id",
+    val downloadURI: URI = URI("https://unsplasy-backend.herokuapp.com/files/download/$id"),
     var name: String = "",
     var type: String = "",
-
-    @Basic(fetch = FetchType.LAZY)
     private val data: ByteArray = byteArrayOf()
 ) {
+
+    fun getData(): ByteArray {
+        return this.data
+    }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -37,7 +36,7 @@ data class File(
         if (likes != other.likes) return false
         if (likedByUser != other.likedByUser) return false
         if (description != other.description) return false
-        if (selfUrl != other.selfUrl) return false
+        if (downloadURI != other.downloadURI) return false
         if (name != other.name) return false
         if (type != other.type) return false
         if (!data.contentEquals(other.data)) return false
@@ -52,7 +51,7 @@ data class File(
         result = 31 * result + likes
         result = 31 * result + likedByUser.hashCode()
         result = 31 * result + description.hashCode()
-        result = 31 * result + selfUrl.hashCode()
+        result = 31 * result + downloadURI.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + type.hashCode()
         result = 31 * result + data.contentHashCode()
@@ -60,7 +59,6 @@ data class File(
     }
 
     override fun toString(): String {
-        return "File(id=$id, createdAt=$createdAt, updatedAt=$updatedAt, likes=$likes, likedByUser=$likedByUser, description='$description', selfUrl='$selfUrl', name='$name', type='$type', data=${data.contentToString()})"
+        return "File(id=$id, createdAt=$createdAt, updatedAt=$updatedAt, likes=$likes, likedByUser=$likedByUser, description='$description', downloadURI=$downloadURI, name='$name', type='$type', data=${data.contentToString()})"
     }
-
 }

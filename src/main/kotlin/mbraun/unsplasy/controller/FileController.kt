@@ -1,18 +1,23 @@
 package mbraun.unsplasy.controller
 
-import mbraun.unsplasy.message.ResponseFile
 import mbraun.unsplasy.message.ResponseMessage
 import mbraun.unsplasy.model.File
 import mbraun.unsplasy.service.FileService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
+import java.net.URL
 import java.util.*
+import javax.imageio.ImageIO
+import javax.servlet.http.HttpServletRequest
 
 @Controller
 @CrossOrigin("http://localhost:3000")
@@ -62,14 +67,21 @@ class FileController(@Autowired val fileService: FileService) {
         return ResponseEntity.status(HttpStatus.OK).body(files)
     }
 
-    @GetMapping("/files/{id}")
-    fun getFile(@PathVariable id: UUID): ResponseEntity<File> {
+    @GetMapping("/files/download/{id}")
+    fun downloadFile(@PathVariable id: UUID, request: HttpServletRequest): ResponseEntity<ByteArrayResource> {
         val file = fileService.getFile(id)
 
         return ResponseEntity
             .ok()
+            .contentType(MediaType.parseMediaType(file.type))
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name} ")
-            .body(file)
+            .body(ByteArrayResource(file.getData()))
+    }
+
+    @GetMapping("/files/{id}")
+    fun displayFile(@PathVariable id: UUID): ResponseEntity<File> {
+        val file = fileService.getFile(id)
+        return ResponseEntity.status(HttpStatus.OK).body(file)
     }
 
     @DeleteMapping("/files/delete/{id}")
