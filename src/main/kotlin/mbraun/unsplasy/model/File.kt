@@ -19,7 +19,7 @@ data class File(
     var likes: Int = 0,
     var likedByUser: Boolean = false,
     var description: String = "",
-    val downloadLink: URI = URI("https://unsplasy-backend.herokuapp.com/files/downloads/$id"),
+    val downloadLink: URI = URI("https://unsplasy-backend.herokuapp.com/files/download/$id"),
     var name: String = "",
     var type: String = "",
 
