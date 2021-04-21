@@ -1,5 +1,6 @@
 package mbraun.unsplasy.controller
 
+import mbraun.unsplasy.message.ResponseFile
 import mbraun.unsplasy.message.ResponseMessage
 import mbraun.unsplasy.model.File
 import mbraun.unsplasy.service.FileService
@@ -12,11 +13,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
-import java.net.URL
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.*
-import javax.imageio.ImageIO
 import javax.servlet.http.HttpServletRequest
 
 @Controller
@@ -40,48 +38,33 @@ class FileController(@Autowired val fileService: FileService) {
         }
     }
 
-//    @GetMapping("/files")
-//    fun getListFiles(): ResponseEntity<List<ResponseFile>> {
-//        val files: List<ResponseFile> = fileService.getAllFiles().map { dbFile ->
-//            val fileDownloadUri = ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path("/files/")
-//                .path(dbFile.id.toString())
-//                .toUriString()
-//
-//            ResponseFile(
-//                dbFile.name,
-//                fileDownloadUri,
-//                dbFile.type,
-//                dbFile.data.size.toLong()
-//            )
-//        }.toList()
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(files)
-//    }
-
     @GetMapping("/files")
-    fun getListFiles(): ResponseEntity<List<File>> {
-        val files: List<File> = fileService.findFiles()
+    fun getListFiles(): ResponseEntity<Sequence<File>> {
+        val files: Sequence<File> = fileService.findFiles()
 
         return ResponseEntity.status(HttpStatus.OK).body(files)
+    }
+
+    @GetMapping("/files/{id}")
+    fun getFile(@PathVariable id: UUID): ResponseEntity<File> {
+        val file = fileService.getFile(id)
+
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name} ")
+            .body(file)
     }
 
     @GetMapping("/files/download/{id}")
     fun downloadFile(@PathVariable id: UUID, request: HttpServletRequest): ResponseEntity<ByteArrayResource> {
         val file = fileService.getFile(id)
+        val data = fileService.getData(file)
 
         return ResponseEntity
             .ok()
             .contentType(MediaType.parseMediaType(file.type))
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name} ")
-            .body(ByteArrayResource(file.getData()))
-    }
-
-    @GetMapping("/files/{id}")
-    fun displayFile(@PathVariable id: UUID): ResponseEntity<File> {
-        val file = fileService.getFile(id)
-        return ResponseEntity.status(HttpStatus.OK).body(file)
+            .body(ByteArrayResource(data))
     }
 
     @DeleteMapping("/files/delete/{id}")

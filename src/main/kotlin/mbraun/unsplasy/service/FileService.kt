@@ -3,12 +3,8 @@ package mbraun.unsplasy.service
 import mbraun.unsplasy.model.File
 import mbraun.unsplasy.repository.FileRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.core.io.UrlResource
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.io.FileNotFoundException
-import java.nio.file.Files
-import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -33,12 +29,16 @@ class FileService(@Autowired val fileRepository: FileRepository) {
 //        return fileRepository.findAll().asSequence()
 //    }
 
-    fun findFiles(): List<File> {
-        return fileRepository.findFiles()
+    fun findFiles(): Sequence<File> {
+        return fileRepository.findFiles().asSequence()
     }
 
     fun deleteById(id: UUID) {
         fileRepository.deleteById(id)
+    }
+
+    fun getData(file: File): ByteArray {
+        return fileRepository.findData(file.id)
     }
 
 }
