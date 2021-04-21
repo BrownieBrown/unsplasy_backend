@@ -1,13 +1,10 @@
 package mbraun.unsplasy.model
 
-import org.hibernate.annotations.Type
-import org.hibernate.type.BinaryType
 import java.net.URI
+import java.net.URL
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "file")
@@ -20,16 +17,13 @@ data class File(
     var likedByUser: Boolean = false,
     var description: String = "",
     val downloadLink: URI = URI("https://unsplasy-backend.herokuapp.com/files/download/$id"),
+    val imageURL: URL = URL("https://unsplasy-backend.herokuapp.com/files/image/$id"),
     var name: String = "",
     var type: String = "",
-
     @Basic(fetch = FetchType.LAZY)
     private val data: ByteArray = byteArrayOf()
-) {
 
-//    fun getData(): ByteArray {
-//        return this.data
-//    }
+) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

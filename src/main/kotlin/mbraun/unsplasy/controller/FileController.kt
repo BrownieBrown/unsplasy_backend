@@ -1,6 +1,5 @@
 package mbraun.unsplasy.controller
 
-import mbraun.unsplasy.message.ResponseFile
 import mbraun.unsplasy.message.ResponseMessage
 import mbraun.unsplasy.model.File
 import mbraun.unsplasy.service.FileService
@@ -13,9 +12,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.*
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @Controller
 @CrossOrigin("http://localhost:3000")
@@ -81,5 +80,14 @@ class FileController(@Autowired val fileService: FileService) {
                     "Could not delete the file with id: $id!"
                 ))
         }
+    }
+
+    @GetMapping("/files/image/{id}")
+    fun displayImage(@PathVariable id: UUID, response: HttpServletResponse) {
+        val file = fileService.getFile(id)
+        val data = fileService.getData(file)
+        response.contentType = file.type
+        response.outputStream.write(data)
+        response.outputStream.close()
     }
 }
