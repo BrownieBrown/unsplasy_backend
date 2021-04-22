@@ -89,4 +89,22 @@ class FileController(@Autowired val fileService: FileService) {
         response.outputStream.write(data)
         response.outputStream.close()
     }
+
+    @PutMapping("file/like/{id}")
+    fun likeImage(@PathVariable id: UUID): ResponseEntity<ResponseMessage> {
+        return try {
+            val file = fileService.getFile(id)
+            fileService.likePhoto(file)
+            ResponseEntity.status(HttpStatus.OK).body(
+                ResponseMessage(
+                    "Liked the image: $id"
+                )
+            )
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                ResponseMessage(
+                    "Failed to like the image: $id"
+                ))
+        }
+    }
 }

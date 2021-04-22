@@ -41,4 +41,8 @@ class FileService(@Autowired val fileRepository: FileRepository) {
         return fileRepository.findData(file.id)
     }
 
+    fun likePhoto(file: File): Int {
+        val id = file.id
+        return fileRepository.increaseLikeByOne(id)
+    }
 }
