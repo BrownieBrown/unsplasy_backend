@@ -44,13 +44,12 @@ class FileController(@Autowired val fileService: FileService) {
         return ResponseEntity.status(HttpStatus.OK).body(files)
     }
 
-    @GetMapping("/files/{id}")
+    @GetMapping("/file/{id}")
     fun getFile(@PathVariable id: UUID): ResponseEntity<File> {
         val file = fileService.getFile(id)
 
         return ResponseEntity
             .ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${file.name} ")
             .body(file)
     }
 
